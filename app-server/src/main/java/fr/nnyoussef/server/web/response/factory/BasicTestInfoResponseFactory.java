@@ -29,8 +29,7 @@ public final class BasicTestInfoResponseFactory extends BaseFunction {
 
         return new BasicTestInfoResponse(
                 feature.getName(),
-                featureDirRelativeToTestSuite.toString(),
-                feature.getDescription()
+                featureDirRelativeToTestSuite.toString()
         );
     }
 
