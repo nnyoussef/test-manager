@@ -6,7 +6,7 @@
     <packaging>pom</packaging>
     <groupId>fr.nnyoussef</groupId>
     <artifactId>test-manager</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0-FINAL</version>
     <name>Test Manager Application</name>
     <properties>
     </properties>

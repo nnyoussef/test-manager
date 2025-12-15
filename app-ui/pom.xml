@@ -6,7 +6,7 @@
     <parent>
         <groupId>fr.nnyoussef</groupId>
         <artifactId>test-manager</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0-FINAL</version>
     </parent>
 
     <artifactId>app-ui</artifactId>
