@@ -1,5 +1,5 @@
 import { createTestLogEntity, type TestLogEntity } from '@/app/test-logs/test-logs.entity.ts';
-import { bufferCount } from 'rxjs';
+import { bufferCount, map } from 'rxjs';
 import { BaseInteractor } from '@/common/base-interactor';
 import type {
     TestLogHistoryViewModel,
@@ -9,6 +9,7 @@ import type {
 import type { Optional } from '@/common/types.ts';
 import type { TestLog, TestRunRecord } from '@/service/state-store/test-log-store.ts';
 import { testRunnerManager } from '@/service/test-runner/test-runner-manager.ts';
+import { ApiEndpointsConstants } from '@/common/constantes/api-endpoint-constants.ts';
 
 class TestLogsInteractor
     extends BaseInteractor<TestLogsOutputProtocol, TestLogEntity>
@@ -32,9 +33,18 @@ class TestLogsInteractor
             this.outputProtocol?.onTestLogStreamReceived(events);
         };
 
-        const logStream = testRunnerManager.getTestLogsStream(
-            uuid ?? this.entity.selectedUuid ?? '',
-        );
+        const logStream = testRunnerManager
+            .getTestLogsStream(uuid ?? this.entity.selectedUuid ?? '')
+            .pipe(
+                map((log) => {
+                    if (log.type === 'HTML_REPORT')
+                        return {
+                            type: 'HTML_REPORT',
+                            data: this.createFullDownloadLink(log.data),
+                        } satisfies TestLog;
+                    return log;
+                }),
+            );
 
         this.entity.testLogsListener = logStream
             ?.pipe(bufferCount(this.getAppEnv().maxElementToRenderPerRenderingCycle))
@@ -113,6 +123,10 @@ class TestLogsInteractor
 
     destroy(): void {
         this.stopListeningToTestLogs();
+    }
+
+    private createFullDownloadLink(url: string): string {
+        return `${this.getAppEnv().apiProperties.url}/${ApiEndpointsConstants.DOC_DOWNLOAD}/${url}`;
     }
 }
 

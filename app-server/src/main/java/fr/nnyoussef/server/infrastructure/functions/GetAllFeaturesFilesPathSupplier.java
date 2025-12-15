@@ -23,10 +23,10 @@ public final class GetAllFeaturesFilesPathSupplier extends BaseFunction implemen
         Path testSuitePath = of(getResDir(), "test-suites");
         try {
             return walk(testSuitePath)
-                    .filter(path -> path.toFile().isFile())
                     .filter(path -> path.toString().contains(".feature"));
         } catch (IOException e) {
             return Stream.empty();
         }
     }
+
 }

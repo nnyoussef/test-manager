@@ -9,9 +9,6 @@ export function useTooltip(parentId: string, name: string) {
         if (name === target) {
             tooltipShow.value = !tooltipShow.value;
             return;
-        } else if (target) {
-            tooltipShow.value = false;
-            return;
         }
         tooltipShow.value = false;
     });

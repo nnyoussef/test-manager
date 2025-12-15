@@ -1,9 +1,14 @@
 <script setup lang="ts">
-import type { DirStruct, FileProps, FileSelectorProps } from '@/components/interactive';
+import type {
+    DirStruct,
+    FileProps,
+    FileSelection,
+    FileSelectorProps,
+} from '@/components/interactive';
 import { computed, ref, watch } from 'vue';
 import IconButton from '@/components/interactive/IconButton.vue';
 import VerticalBox from '@/components/layouts/VerticalBox.vue';
-import type { FunctionMap } from '@/common/types.ts';
+import type { FunctionMap, Optional } from '@/common/types.ts';
 import HorizontalBox from '@/components/layouts/HorizontalBox.vue';
 import BreadCrumb from '@/components/interactive/BreadCrumb.vue';
 
@@ -11,7 +16,7 @@ const props = withDefaults(defineProps<FileSelectorProps>(), {
     selectPath: '',
 });
 const emits = defineEmits<{
-    itemSelected: [data: (FileProps & { type: 'dir' | 'file' }) | undefined];
+    itemSelected: [data: Optional<FileSelection>];
 }>();
 
 const currentWorkingDir = ref<DirStruct>();
@@ -140,7 +145,7 @@ const emitEvent = () => {
     let directory = currentWorkingDirValue?.currentWorkingDirectoryPath;
     let name = directory;
     let path = directory;
-    let type: 'dir' | 'file' = 'dir';
+    let type: FileSelection['type'] = 'dir';
     let selected = false;
 
     if (selectedFile) {

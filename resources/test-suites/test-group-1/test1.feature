@@ -1,5 +1,4 @@
 Feature: Test N01
-
   Scenario: User Posts Report
     * def group =
       """

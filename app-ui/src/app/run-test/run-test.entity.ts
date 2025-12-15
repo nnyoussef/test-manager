@@ -1,43 +1,89 @@
 import type { KeyValueMap } from '@/common/types';
 
-type TestMetaData = {
+interface TestProperties {
     name: string;
     path: string;
     directory?: string;
-};
+}
 
 interface TestEntity {
-    getAvailableTests(): TestMetaData[];
+    /**
+     * Gets the list of available tests.
+     **/
+    getAvailableTests(): TestProperties[];
 
+    /**
+     * Gets the list of available tests configurations.
+     */
     getAvailableTestsConfigs(): KeyValueMap;
 
-    setAvailableTests(tests: TestMetaData[]): void;
+    /**
+     * Sets the list of available tests.
+     * @param tests - The list of available tests to set.
+     */
+    setAvailableTests(tests: TestProperties[]): void;
 
+    /**
+     * Sets the list of available tests configurations.
+     * @param testConfigs - The list of available tests configurations to set.
+     */
     setAvailableTestsConfigs(testConfigs: KeyValueMap): void;
 
+    /**
+     * Gets the configuration for a specific test.
+     * @param path - The path of the test for which to get the configuration.
+     * @returns The configuration for the specified test.
+     */
     getTestConfigAt(path: string): KeyValueMap;
 
+    /**
+     * Clears the configuration for a specific test.
+     * @param path - The path of the test for which to clear the configuration.
+     * @returns True if the configuration was cleared, false otherwise.
+     */
     clearTestConfigsWith(path: string): boolean;
 
+    /**
+     * Sets the configuration for a specific test.
+     * @param path - The path of the test for which to set the configuration.
+     * @param config - The configuration to set for the specified test.
+     */
     setTestConfigsWith(path: string, config: KeyValueMap): void;
 
+    /**
+     * Resets the entity to its initial state.
+     */
     reset(): void;
 
+    /**
+     * Checks if the entity has any tests available.
+     */
     hasTests(): boolean;
 
+    /**
+     * Checks if the entity has a configuration for a specific test.
+     * @param path - The path of the test to check for a configuration.
+     */
     hasTestConfigAt(path: string): boolean;
 
+    /**
+     * Sets the last selected test path.
+     * @param selectedTestPath
+     */
     setLastSelectedTestPath(selectedTestPath: { name: string; path: string }): void;
 
+    /**
+     * Gets the last selected test path.
+     */
     getLastSelectedTestPath(): { name: string; path: string };
 }
 
 const createRunTestEntity = (): TestEntity => {
-    let availableTests: TestMetaData[] = [];
+    let availableTests: TestProperties[] = [];
     let availableTestsConfigs: KeyValueMap = {};
-    let lastSelectedTestPath: { name: string; path: string } = { name: '', path: '' };
+    let lastSelectedTestPath: TestProperties = { name: '', path: '' };
 
-    const setLastSelectedTestPath = (selectedTestPath: { name: string; path: string }) => {
+    const setLastSelectedTestPath = (selectedTestPath: TestProperties) => {
         lastSelectedTestPath = { ...selectedTestPath };
     };
 
@@ -47,7 +93,7 @@ const createRunTestEntity = (): TestEntity => {
     const getAvailableTestsConfigs = () => ({ ...availableTestsConfigs });
     const getTestConfigAt = (path: string) => availableTestsConfigs[path] ?? {};
 
-    const setAvailableTests = (tests: TestMetaData[]) => {
+    const setAvailableTests = (tests: TestProperties[]) => {
         availableTests = [...tests];
     };
     const setAvailableTestsConfigs = (testConfigs: KeyValueMap) => {
@@ -62,7 +108,7 @@ const createRunTestEntity = (): TestEntity => {
 
     const clearTestConfigsWith = (path: string) => {
         if (availableTestsConfigs.hasOwnProperty(path)) {
-            delete availableTestsConfigs[path];
+            delete [path];
             return true;
         }
         return false;
@@ -89,4 +135,4 @@ const createRunTestEntity = (): TestEntity => {
     };
 };
 
-export { createRunTestEntity, type TestEntity, type TestMetaData };
+export { createRunTestEntity, type TestEntity, type TestProperties };

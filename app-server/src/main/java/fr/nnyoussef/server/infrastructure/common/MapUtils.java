@@ -31,7 +31,7 @@ public final class MapUtils {
         List<Object> javaList = new LinkedList<>();
         for (Object item : jsList) {
             if (item instanceof Map) {
-                javaList.add(deepCopyMap((Map<String, Object>) item));
+                javaList.add((item));
             } else if (item instanceof List) {
                 javaList.add(deepCopyList((List<Object>) item));
             } else {

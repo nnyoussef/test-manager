@@ -4,27 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.5</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
     <groupId>fr.nnyoussef</groupId>
-    <artifactId>test-automation</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>Test Automation Application</name>
-    <description>Test Automation Application</description>
+    <artifactId>test-manager</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>Test Manager Application</name>
     <properties>
     </properties>
     <modules>
         <module>app-ui</module>
         <module>app-server</module>
+        <module>deployables</module>
     </modules>
-    <repositories>
-        <repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/nnyoussef/mvn-repos</url>
-        </repository>
-    </repositories>
 </project>

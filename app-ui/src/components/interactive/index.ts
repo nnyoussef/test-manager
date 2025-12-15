@@ -29,6 +29,8 @@ type FileProps = {
     selected: boolean;
 };
 
+type FileSelection = FileProps & { type: 'dir' | 'file' };
+
 interface DirStruct {
     currentWorkingDirectoryPath: string;
     currentWorkingDirectoryName?: string;
@@ -59,6 +61,7 @@ export type {
     IconButtonProps,
     FileSelectorProps,
     DirStruct,
+    FileSelection,
     SelectableItemsTableProps,
     BreadCrumbProps,
     FileProps,

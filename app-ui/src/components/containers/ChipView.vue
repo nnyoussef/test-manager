@@ -21,7 +21,7 @@ withDefaults(defineProps<ChipViewProps>(), {
             icon="close"
             :fill="textColor"
             :role="`${role}-close-button`"
-            :tag="tag"
+            :group="group"
             :value="value ?? text"
         />
     </HorizontalBox>

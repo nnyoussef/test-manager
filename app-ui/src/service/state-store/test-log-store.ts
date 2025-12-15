@@ -3,14 +3,7 @@ import type { KeyValueMap } from '@/common/types.ts';
 import { env } from '@/environment';
 import { ReplaySubject } from 'rxjs';
 import { computed, ref } from 'vue';
-
-export enum TestLogTypeEnum {
-    TEST_END,
-    HTML_REPORT,
-    PROGRESS_EVENT_MESSAGE,
-    PROGRESS_EVENT_PERCENTAGE,
-    ERROR,
-}
+import type { TestLogTypeEnum } from '@/common/test-log-type.ts';
 
 export type TestLogType = keyof typeof TestLogTypeEnum;
 
@@ -26,12 +19,12 @@ export type TestRunRecord = {
     eventSource: EventSource;
 };
 
-type TestLogsHistoryType = KeyValueMap<TestRunRecord>;
+type TestRunHistory = KeyValueMap<TestRunRecord>;
 
 // ✅ Composition API version of useTestLogsState
 export const useTestLogsState = defineStore('test-logs', () => {
     // --- STATE ---
-    const testLogsHistory = ref<TestLogsHistoryType>({});
+    const testLogsHistory = ref<TestRunHistory>({});
     const lastCreatedUuid = ref<string>('');
 
     // --- GETTERS (computed) ---
@@ -78,9 +71,7 @@ export const useTestLogsState = defineStore('test-logs', () => {
     function putTestLogInHistoryWithUuid(log: { type: TestLogType; data: string }, uuid: string) {
         const record = getTestLogsByUuid(uuid);
         if (!record) return;
-        if (record.stream.closed) {
-            record.stream = new ReplaySubject();
-        }
+        if (record.stream.closed) record.stream = new ReplaySubject();
         record.stream.next(log);
     }
 
@@ -136,7 +127,6 @@ export const useTestLogsState = defineStore('test-logs', () => {
         putTestLogInHistoryWithUuid,
         testLogsForUuidComplete,
         setLastCreatedUuidTo,
-        clearTestLogStream,
         registerEventSource,
     };
 });

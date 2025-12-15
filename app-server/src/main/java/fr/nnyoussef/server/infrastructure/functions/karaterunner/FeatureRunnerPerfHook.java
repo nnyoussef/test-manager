@@ -41,6 +41,7 @@ public final class FeatureRunnerPerfHook implements PerfHook {
 
     @Override
     public void reportPerfEvent(PerfEvent perfEvent) {
+
         if (perfEvent.isFailed()) {
             ServerSentEvent<String> event = ServerSentEventFactory.createSse(ERROR, randomUUID().toString(), format(TEST_FAILED_EVENT_MESSAGE_FORMAT, perfEvent.getMessage()));
             sink.next(event);

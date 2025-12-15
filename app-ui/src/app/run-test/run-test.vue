@@ -5,15 +5,14 @@ import FileSelectorList from '@/components/interactive/FileSelectorList.vue';
 import IconButton from '@/components/interactive/IconButton.vue';
 import { APP_EVENTS_INJECTION_KEY, type AppEvents } from '@/app/app.events.ts';
 import { createRunTestInputProtocol } from '@/app/run-test/run-test.interactor.ts';
-import { type TestMetaDataViewModel } from '@/app/run-test/run-test.protocol.ts';
-import type { KeyValueMap, MessageLevel } from '@/common/types';
+import { type TestPropertiesViewModel } from '@/app/run-test/run-test.protocol.ts';
+import type { HttpErrorResponse, KeyValueMap, MessageLevel } from '@/common/types';
 import { useRequestAnimationFrame } from '@/components/composable/animation-frame.ts';
 import { useErrorHandler } from '@/components/composable/error-handler.ts';
 import LazyRenderableView from '@/components/containers/LazyRenderableView.vue';
 import HorizontalBox from '@/components/layouts/HorizontalBox.vue';
-import { utils } from '@/common/utils.ts';
-import type { FileProps } from '@/components/interactive';
-import { AxiosError } from 'axios';
+import { download } from '@/common/utils.ts';
+import type { FileSelection } from '@/components/interactive';
 import { useRouter } from 'vue-router';
 
 const appEvents = inject(APP_EVENTS_INJECTION_KEY) as AppEvents;
@@ -21,9 +20,9 @@ const inputProtocol = createRunTestInputProtocol();
 useErrorHandler();
 const router = useRouter();
 
-const testsAvailable = shallowRef<TestMetaDataViewModel[]>([]);
+const testsAvailable = shallowRef<TestPropertiesViewModel[]>([]);
 const testExplorerRefreshLoader = ref(false);
-const selectedTest = ref<TestMetaDataViewModel>();
+const selectedTest = ref<TestPropertiesViewModel>();
 const isDirectorySelected = ref(false);
 const currentTestLaunchConfiguration = ref<KeyValueMap>();
 const testRunConfPanelIsLoaded = ref(false);
@@ -37,7 +36,7 @@ const DynamicallyConfiguredForm = defineAsyncComponent(
 );
 
 // Event handler for test selection
-function handleTestSelected(selectedFileOrFolder: FileProps & { type: 'dir' | 'file' }) {
+function handleTestSelected(selectedFileOrFolder: FileSelection) {
     isDirectorySelected.value = selectedFileOrFolder.type === 'dir';
     inputProtocol.setLastSelectedTestPath(selectedFileOrFolder);
     loadForm.value = true;
@@ -55,7 +54,7 @@ function handleFormSubmit(data: KeyValueMap) {
 }
 
 // Output protocol handlers
-function handleAllTestAvailable(data: TestMetaDataViewModel[]) {
+function handleAllTestAvailable(data: TestPropertiesViewModel[]) {
     refreshButtonDisabled.value = false;
     testsAvailable.value = data;
     useRequestAnimationFrame(() => (testRunConfPanelIsLoaded.value = true));
@@ -83,7 +82,7 @@ function handleTestConfigurationForPathRefreshed(data: KeyValueMap) {
     currentTestLaunchConfiguration.value = data;
 }
 
-function handleTestListRefreshed(data: TestMetaDataViewModel[]) {
+function handleTestListRefreshed(data: TestPropertiesViewModel[]) {
     refreshButtonDisabled.value = false;
     testsAvailable.value = data;
     testExplorerRefreshLoader.value = false;
@@ -110,7 +109,7 @@ function downloadDocumentation(isDirectory = false) {
     const directory = selectedTestValue?.directory as string;
     const filePath = selectedTestValue?.path as string;
     const fileName = selectedTestValue?.name as string;
-    utils(
+    download(
         isDirectory ? directory : filePath,
         'docs',
         'pdf',
@@ -130,7 +129,7 @@ function downloadSuccess() {
     });
 }
 
-function downloadFailure(error: AxiosError) {
+function downloadFailure(error: HttpErrorResponse) {
     downloadButtonDisabled.value = false;
     appEvents.POPUP.next({
         message: `Error ${error.code} while downloading documentation : ${error.cause}`,

@@ -1,4 +1,4 @@
-package fr.nnyoussef.server.infrastructure;
+package fr.nnyoussef.server.infrastructure.configurations;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

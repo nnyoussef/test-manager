@@ -21,7 +21,7 @@ const onItemClicked = (mv: MouseEvent) => {
     const label = el.dataset.value;
     if (label) {
         const value = label;
-        const position = +(el.dataset.tag ?? -1);
+        const position = +(el.dataset.group ?? -1);
         emits('onSelected', { value, label: props.rowLabel(props.items[position]) });
         let tr: HTMLElement = el;
         tr.tagName === 'TD' && (tr = tr.parentElement as HTMLTableRowElement);
@@ -54,11 +54,11 @@ const onItemClicked = (mv: MouseEvent) => {
                 :key="rowValue(item)"
                 :data-value="rowValue(item)"
                 :data-selected="rowValue(item) === selectedValue && !disableSelectRow"
-                :data-tag="index"
+                :data-group="index"
             >
                 <td
                     v-for="col in itemToRowMapper(item)"
-                    :data-tag="index"
+                    :data-group="index"
                     :data-value="rowValue(item)"
                 >
                     {{ col }}

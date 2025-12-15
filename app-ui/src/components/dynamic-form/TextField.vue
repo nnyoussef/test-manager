@@ -20,6 +20,7 @@ const { inputRef, tooltipShow } = useInputValidation(props, model);
             type="text"
             :required="required"
             :id="name"
+            :autocomplete="autoComplete ? 'on' : 'off'"
             :name="name"
             :placeholder="placeHolder"
             :pattern="pattern"
@@ -39,7 +40,7 @@ const { inputRef, tooltipShow } = useInputValidation(props, model);
             icon="question"
             :role="'tooltip'"
             :value="name"
-            :tag="name"
+            :group="name"
         />
     </div>
 </template>

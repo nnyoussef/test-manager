@@ -1,0 +1,7 @@
+export enum TestLogTypeEnum {
+    TEST_END,
+    HTML_REPORT,
+    PROGRESS_EVENT_MESSAGE,
+    PROGRESS_EVENT_PERCENTAGE,
+    ERROR,
+}

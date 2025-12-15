@@ -58,6 +58,6 @@ public final class UiRenderFunction extends BaseFunction implements BiFunction<U
                         CREATE,
                         TRUNCATE_EXISTING,
                         SPARSE)
-                .then(Mono.fromCallable(() -> "http://localhost:8080/api/resources/info/download/" + fileName));
+                .then(Mono.fromCallable(() ->  fileName));
     }
 }

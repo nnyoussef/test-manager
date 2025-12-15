@@ -1,4 +1,4 @@
-import type { TestMetaData } from '@/app/run-test/run-test.entity.ts';
+import type { TestProperties } from '@/app/run-test/run-test.entity.ts';
 import type { KeyValueMap } from '@/common/types';
 import type { BaseOutputProtocole } from '@/common/base-output-protocole.ts';
 
@@ -61,7 +61,7 @@ interface RunTestInteractorOutputProtocol extends BaseOutputProtocole {
      * Called when all available tests are fetched.
      * @param data - The list of available test metadata.
      */
-    allTestAvailable(data: TestMetaDataViewModel[]): void;
+    allTestAvailable(data: TestPropertiesViewModel[]): void;
 
     /**
      * Called when specific details for a test are fetched.
@@ -77,7 +77,6 @@ interface RunTestInteractorOutputProtocol extends BaseOutputProtocole {
 
     /**
      * Called when there is an error registering a test runner.
-     * @param error - The error message.
      */
     registerForTestRunnerFailure(): void;
 
@@ -85,7 +84,7 @@ interface RunTestInteractorOutputProtocol extends BaseOutputProtocole {
      * Called when the test list is refreshed.
      * @param data - The refreshed list of test metadata.
      */
-    testListRefreshed(data: TestMetaDataViewModel[]): void;
+    testListRefreshed(data: TestPropertiesViewModel[]): void;
 
     /**
      * Called when the test configuration inputs for a specific path are refreshed.
@@ -100,10 +99,10 @@ interface RunTestInteractorOutputProtocol extends BaseOutputProtocole {
     lastSelectedTestPathRetrieved(data: { name: string; path: string } | null): void;
 }
 
-type TestMetaDataViewModel = Readonly<TestMetaData>;
+type TestPropertiesViewModel = Readonly<TestProperties>;
 
 export type {
     RunTestInteractorInputProtocol,
     RunTestInteractorOutputProtocol,
-    TestMetaDataViewModel,
+    TestPropertiesViewModel,
 };

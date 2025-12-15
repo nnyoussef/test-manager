@@ -1,14 +1,9 @@
-import type {
-    CommonComponentAttribute,
-    ReadonlyKeyValueMap,
-    SingleOrArray,
-    TextOrNumber,
-} from '@/common/types';
+import type { CommonComponentAttribute, ReadonlyKeyValueMap } from '@/common/types';
 import type { Subject } from 'rxjs';
 import { type Component, defineAsyncComponent } from 'vue';
 
 type InputType = 'text' | 'number' | 'select' | 'file' | 'temporal';
-type FormControlDataType = SingleOrArray<TextOrNumber> | SingleOrArray<Date> | File;
+type FormControlDataType = string | string[] | number | number[] | Date | Date[];
 
 interface FormElementProps {
     parentId: string;
@@ -82,7 +77,6 @@ const formComponentsLookup: ReadonlyKeyValueMap<Component> = {
     text: defineAsyncComponent(() => import('./TextField.vue')),
     number: defineAsyncComponent(() => import('./NumberField.vue')),
     select: defineAsyncComponent(() => import('./SelectField.vue')),
-    //file: defineAsyncComponent(() => import('./FileUploadField.vue')),
     field_not_implemented: defineAsyncComponent(() => import('./FieldTypeNotImplemented.vue')),
     temporal: defineAsyncComponent(() => import('./TemporalField.vue')),
 };

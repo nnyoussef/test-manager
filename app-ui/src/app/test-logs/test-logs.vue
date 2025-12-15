@@ -63,6 +63,7 @@ const onTestLogStreamReceived = (logChunk: TestLogViewModel[]) => {
         renderTestEvent();
     }
 };
+
 /**
  *  requestAnimationFrame is very important, it allows us to render elements with size defined by
  *  env.maxElementToRenderPerRenderingCycle as soon as they enter the buffer and synchronized with frame rate,

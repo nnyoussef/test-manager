@@ -17,7 +17,7 @@ import static reactor.core.publisher.Mono.just;
 import static reactor.core.scheduler.Schedulers.parallel;
 
 @RestController
-@RequestMapping("/api/test")
+@RequestMapping("/api/test-runner")
 public final class TestRunningRestController extends BaseFunction {
 
     public TestRunningRestController(BeanFactory beanFactory) {
@@ -27,7 +27,7 @@ public final class TestRunningRestController extends BaseFunction {
     @PostMapping(
             produces = APPLICATION_JSON_VALUE,
             consumes = APPLICATION_JSON_VALUE,
-            value = "/register-to-test-runner"
+            value = "/register"
     )
     public Mono<TestRegistrationUuidTokenResponse> registerForTestEventStream(@RequestBody FeatureRunnerRequestBody featureRunnerRequestBody) {
         return just(featureRunnerRequestBody)
@@ -38,7 +38,7 @@ public final class TestRunningRestController extends BaseFunction {
     }
 
     @GetMapping(
-            value = "/run-test",
+            value = "/run",
             produces = TEXT_EVENT_STREAM_VALUE
     )
     public Flux<ServerSentEvent<String>> runTest(@RequestParam("uuid") String uuid) {

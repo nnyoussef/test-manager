@@ -43,7 +43,7 @@ function indexHandler(): Plugin {
     let version: string;
 
     return {
-        name: 'neutralino-library',
+        name: 'index-handler',
         apply: 'build',
         configResolved(config) {
             apihostPort = new URL(config.env.VITE_API_URL).origin;
@@ -57,18 +57,6 @@ function indexHandler(): Plugin {
 
             const dom = new JSDOM(html);
             const document = dom.window.document;
-
-            const neutralineoScript = document.createElement('script');
-            neutralineoScript.src = '/js/neutralino.js';
-            neutralineoScript.setAttribute('defer', '');
-            neutralineoScript.setAttribute('async', '');
-            document.head.appendChild(neutralineoScript);
-
-            const mainScript = document.createElement('script');
-            mainScript.src = '/js/main.js';
-            mainScript.setAttribute('defer', '');
-            mainScript.setAttribute('async', '');
-            document.head.appendChild(mainScript);
 
             const apiHostLink = document.createElement('link');
             apiHostLink.rel = 'preconnect';
@@ -142,6 +130,7 @@ export default defineConfig(({ mode }) => {
             vue(),
             ViteMinifyPlugin(),
             isDev && vueDevTools(),
+
             isDev &&
                 Inspector({
                     enabled: true,
@@ -151,11 +140,11 @@ export default defineConfig(({ mode }) => {
                 }),
             isDev && Inspect(),
             visualizer({
+                projectRoot: './dist',
                 filename: './bundle-analysis.html', // Output file
                 open: false, // Automatically open report in browser
-                gzipSize: true,
                 brotliSize: true,
-                template: 'flamegraph',
+                template: 'network',
             }),
             svgMinification(),
             indexHandler(),

@@ -22,7 +22,7 @@ import static java.util.Comparator.comparing;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping("/api/resources/info")
+@RequestMapping("/api/resources")
 public final class ResourcesRestController extends BaseFunction {
 
     private final BasicTestInfoResponseFactory basicTestInfoResponseFactory;
@@ -35,7 +35,7 @@ public final class ResourcesRestController extends BaseFunction {
     }
 
     @GetMapping(
-            value = "get/all-tests",
+            value = "all-tests",
             produces = APPLICATION_JSON_VALUE)
     public Flux<BasicTestInfoResponse> getAllTests() {
         return Flux.fromStream(getAllFeaturesFilesPathSupplier())
@@ -46,7 +46,7 @@ public final class ResourcesRestController extends BaseFunction {
     }
 
     @GetMapping(
-            value = "get/all-tests-details",
+            value = "all-tests-details",
             produces = APPLICATION_JSON_VALUE
     )
     public Mono<Map<String, Object>> getAllTestsDetails(@RequestParam("from") String featurePath) {
@@ -58,8 +58,7 @@ public final class ResourcesRestController extends BaseFunction {
     public Flux<DataBuffer> downloadFile(ServerWebExchange webExchange,
                                          @RequestParam("category") Optional<String> category,
                                          @RequestParam("fileExtension") Optional<String> fileExtension) {
-        String filePath = webExchange.getRequest().getPath().pathWithinApplication().subPath(9).value();
-
+        String filePath = webExchange.getRequest().getPath().pathWithinApplication().subPath(7).value();
         String modifiedFilePath = category
                 .map(c -> "/" + c + "/" + filePath)
                 .orElse(filePath);

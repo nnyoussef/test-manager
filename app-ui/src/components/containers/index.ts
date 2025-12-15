@@ -9,7 +9,6 @@ interface ChipViewProps extends CommonComponentAttribute {
 
 interface LazyRendererableProps {
     render: boolean;
-    asyncRenderFunction?: AsyncComponentLoader;
 }
 
 interface DialogBoxWithDynamicContentProps {

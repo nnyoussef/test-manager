@@ -5,13 +5,58 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>fr.nnyoussef</groupId>
-        <artifactId>test-automation</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <artifactId>test-manager</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>app-ui</artifactId>
 
-    <name>Test Automation UI App</name>
+    <name>Test Manager UI App</name>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+
+                    <execution>
+                        <id>npm-install</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>install</argument>
+                            </arguments>
+                            <workingDirectory>${project.basedir}</workingDirectory>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>npm-build</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>build</argument>
+                            </arguments>
+                            <workingDirectory>${project.basedir}</workingDirectory>
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
 
 
 </project>

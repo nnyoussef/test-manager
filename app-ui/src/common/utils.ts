@@ -1,17 +1,18 @@
 import { Axios as axios } from 'axios-observable';
-import type { AxiosError } from 'axios';
+import type { HttpErrorResponse } from '@/common/types.ts';
+import { ApiEndpointsConstants } from '@/common/constantes/api-endpoint-constants.ts';
 
-export const utils = (
+export const download = (
     filePath: string,
     category: 'docs' | 'forms' | 'output',
     fileExtension?: string,
     outputFileName: string = 'downloaded-file',
     handlers?: {
         successHandler?: () => void;
-        errorHandler?: (error: AxiosError) => void;
+        errorHandler?: (error: HttpErrorResponse) => void;
     },
 ) => {
-    const fullEndPoint = `/resources/info/download/${filePath}`;
+    const fullEndPoint = `${ApiEndpointsConstants.DOC_DOWNLOAD}/${filePath}`;
     axios
         .get(fullEndPoint, {
             responseType: 'blob',
@@ -22,7 +23,7 @@ export const utils = (
                 const blob = new Blob([response.data]);
                 const link = document.createElement('a');
                 link.href = globalThis.URL.createObjectURL(blob);
-                link.setAttribute('utils', `${outputFileName}.${fileExtension}`);
+                link.setAttribute('download', `${outputFileName}.${fileExtension}`);
                 document.body.appendChild(link);
                 link.click();
                 link.remove();

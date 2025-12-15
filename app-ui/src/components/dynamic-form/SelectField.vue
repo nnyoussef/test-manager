@@ -122,8 +122,8 @@ const resetFieldToDefault = () => {
 };
 
 formEvent.SELECT_FIELD_CHIP_CLOSE_CLICKED.subscribe({
-    next: ({ tag, value }) => {
-        if (tag !== props.name) return;
+    next: ({ group, value }) => {
+        if (group !== props.name) return;
         const newData = model.value.data.filter((item) => item !== value);
         const isValid = validate(newData);
         model.value = {
@@ -184,7 +184,7 @@ onMounted(() => {
                 icon="question"
                 :role="'tooltip'"
                 :value="name"
-                :tag="name"
+                :group="name"
             />
         </div>
         <transition v-on="transitionHooks">
@@ -216,7 +216,7 @@ onMounted(() => {
                     :text="item"
                     :enableCloseButton="true"
                     :role="'select-field-selection'"
-                    :tag="name"
+                    :group="name"
                 />
             </TransitionGroup>
         </div>

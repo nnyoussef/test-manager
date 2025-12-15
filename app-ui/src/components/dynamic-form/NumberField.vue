@@ -39,7 +39,7 @@ const { inputRef, tooltipShow } = useInputValidation(props, model);
             icon="question"
             :role="'tooltip'"
             :value="name"
-            :tag="name"
+            :group="name"
         />
     </div>
 </template>

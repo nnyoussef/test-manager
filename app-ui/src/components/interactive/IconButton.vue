@@ -14,7 +14,7 @@ const props = withDefaults(defineProps<IconButtonProps>(), {
     tooltipContent: '',
 });
 
-const anchorName: Readonly<string> = `--${props.buttonId}`;
+const anchorName: Readonly<string> = `--${props.buttonId ?? ''}`;
 
 const iconContainerClassName = ref([props.iconClassName]);
 watchEffect(() => {
@@ -37,12 +37,17 @@ watchEffect(() => {
             }"
             :title="buttonLabel"
             :data-role="role"
-            :data-tag="tag"
+            :data-group="group"
             :data-value="value"
             type="button"
             :id="buttonId"
         >
-            <HorizontalBox style="gap: 4px" :data-role="role" :data-tag="tag" :data-value="value">
+            <HorizontalBox
+                style="gap: 4px"
+                :data-role="role"
+                :data-group="group"
+                :data-value="value"
+            >
                 <IconContainer
                     :fill="iconColor ?? buttonTextColor"
                     :icon="icon"
@@ -50,7 +55,7 @@ watchEffect(() => {
                     :size="iconSize"
                     :role="role"
                     :data-value="value"
-                    :tag="tag"
+                    :group="group"
                 />
                 {{ buttonLabel }}
             </HorizontalBox>

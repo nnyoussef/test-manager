@@ -1,5 +1,3 @@
-import { map } from 'rxjs';
-import { testInfoRepository } from '@/service/http-bff/test-info-repository.ts';
 import { toRaw } from 'vue';
 import { createRunTestEntity, type TestEntity } from './run-test.entity.ts';
 import { BaseInteractor } from '@/common/base-interactor';
@@ -10,6 +8,7 @@ import type {
 import type { KeyValueMap } from '@/common/types';
 import type { FormControl, FormControlDataType } from '@/components/dynamic-form';
 import { testRunnerManager } from '@/service/test-runner/test-runner-manager.ts';
+import { resourceService } from '@/service/http-bff/resource-service.ts';
 
 /**
  * Interactor responsible for managing test execution and related metadata.
@@ -34,24 +33,21 @@ class RunTestInteractor
             return;
         }
 
-        testInfoRepository
-            .fetchAllAvailableTests(this.abortController)
-            .pipe(map((response) => response.data))
-            .subscribe({
-                next: (tests) => {
-                    this.entity.setAvailableTests(tests);
-                    this.saveToGpStateStore(RunTestInteractor.AVAILABLE_TESTS_KEY, tests);
+        resourceService.fetchAllAvailableTests(this.abortController).subscribe({
+            next: (tests) => {
+                this.entity.setAvailableTests(tests);
+                this.saveToGpStateStore(RunTestInteractor.AVAILABLE_TESTS_KEY, tests);
 
-                    const action = isRefreshAction
-                        ? this.outputProtocol.testListRefreshed
-                        : this.outputProtocol.allTestAvailable;
-                    action(this.entity.getAvailableTests());
-                    this.outputProtocol.eventReporter('Test fetched successfully', 'success');
-                },
-                error: (error: Error) => {
-                    this.outputProtocol.eventReporter(error.message, 'error');
-                },
-            });
+                const action = isRefreshAction
+                    ? this.outputProtocol.testListRefreshed
+                    : this.outputProtocol.allTestAvailable;
+                action(this.entity.getAvailableTests());
+                this.outputProtocol.eventReporter('Test fetched successfully', 'success');
+            },
+            error: (error: Error) => {
+                this.outputProtocol.eventReporter(error.message, 'error');
+            },
+        });
     }
 
     /** Fetches test configuration for a given test path. */
@@ -62,36 +58,28 @@ class RunTestInteractor
             return;
         }
 
-        testInfoRepository
-            .fetchTestSpecificDetails(path, this.abortController)
-            .pipe(map((response) => response.data))
-            .subscribe({
-                next: (configData) => {
-                    this.entity.setTestConfigsWith(path, configData);
+        resourceService.fetchTestSpecificDetails(path, this.abortController).subscribe({
+            next: (configData: KeyValueMap) => {
+                this.entity.setTestConfigsWith(path, configData);
 
-                    const config = this.entity.getTestConfigAt(path);
-                    const action = isRefreshAction
-                        ? this.outputProtocol.testConfigurationForPathRefreshed
-                        : this.outputProtocol.testSpecificDetails;
-                    if (config) {
-                        action(config);
-                        this.outputProtocol.eventReporter(
-                            'Test configuration fetched successfully',
-                            'success',
-                        );
-                    }
-                },
-                error: (error: Error) => this.outputProtocol.eventReporter(error.message, 'error'),
-            });
+                const config = this.entity.getTestConfigAt(path);
+                const action = isRefreshAction
+                    ? this.outputProtocol.testConfigurationForPathRefreshed
+                    : this.outputProtocol.testSpecificDetails;
+                if (config) {
+                    action(config);
+                    this.outputProtocol.eventReporter(
+                        'Test configuration fetched successfully',
+                        'success',
+                    );
+                }
+            },
+            error: (error: Error) => this.outputProtocol.eventReporter(error.message, 'error'),
+        });
     }
 
     /** Registers a new test run with the provided parameters. */
     public registerForTestRunner(name: string, path: string, form: KeyValueMap<never>): void {
-        if (!this.isTestRunnerParamsValid(name, path, form)) {
-            this.outputProtocol.registerForTestRunnerFailure();
-            return;
-        }
-
         const testParams = this.formatTestParams(form);
 
         const onRegistrationLimitReached = () => {
@@ -200,7 +188,7 @@ class RunTestInteractor
     ): KeyValueMap<string> {
         const params: KeyValueMap<string> = {};
         for (const [key, value] of Object.entries(form)) {
-            params[key] = toRaw(toRaw(value).data);
+            params[key] = <string>toRaw(toRaw(value).data);
         }
         return params;
     }

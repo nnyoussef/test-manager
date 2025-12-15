@@ -4,15 +4,23 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.6</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>fr.nnyoussef</groupId>
+        <artifactId>test-manager</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <groupId>fr.nnyoussef</groupId>
     <artifactId>app-server</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>Test Automation Server App</name>
+    <name>Test Manager Server App</name>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>3.2.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -65,26 +73,32 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.19.0</version>
         </dependency>
-
-        <!-- todo: rectify to work with java19        <dependency>-->
-        <!--            <groupId>fr.nyo</groupId>-->
-        <!--            <artifactId>web-server-starter</artifactId>-->
-        <!--            <version>1.0-SNAPSHOT</version>-->
-        <!--            <scope>compile</scope>-->
-        <!--        </dependency>-->
+        <dependency>
+            <groupId>com.openai</groupId>
+            <artifactId>openai-java</artifactId>
+            <version>4.8.0</version>            <!-- use latest version if different -->
+        </dependency>
     </dependencies>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>sb-packager</id>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>25</source>
-                    <target>25</target>
+                    <source>17</source>
+                    <target>17</target>
                     <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>

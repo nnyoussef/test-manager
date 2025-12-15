@@ -50,9 +50,9 @@ const onSubmit = () => {
     if (isFormValid(form.value)) {
         isFormInvalid.value = false;
         emit('onSubmitClicked', toRaw(form.value));
-    } else {
-        isFormInvalid.value = true;
+        return;
     }
+    isFormInvalid.value = true;
 };
 
 const onClick = (event: MouseEvent) => {
@@ -64,7 +64,7 @@ const onClick = (event: MouseEvent) => {
 
 const processForTooltipClick = (data: CommonComponentAttribute) => {
     if (data?.role === 'tooltip') {
-        formEvent.TOOLTIP_CLICKED.next(data.tag);
+        formEvent.TOOLTIP_CLICKED.next(data.group);
         return;
     }
     formEvent.TOOLTIP_CLICKED.next(undefined);

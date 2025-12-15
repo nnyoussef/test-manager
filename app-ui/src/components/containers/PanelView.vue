@@ -10,10 +10,10 @@ defineProps({
 <template>
     <VerticalBox class="vertical-layout">
         <HorizontalBox class="title">
-            <slot name="title"></slot>
+            <slot name="title" />
         </HorizontalBox>
         <div class="body">
-            <slot name="body"></slot>
+            <slot name="body" />
         </div>
     </VerticalBox>
 </template>

@@ -17,7 +17,7 @@ const iconHref = computed(() => `${SvgSprite}#${props.icon}`);
         :class="className"
         v-memo="props.icon"
         :data-role="role"
-        :data-tag="tag"
+        :data-group="group"
         :data-value="value"
         :style="{ width: size, height: height ?? size }"
     >
@@ -28,9 +28,9 @@ const iconHref = computed(() => `${SvgSprite}#${props.icon}`);
             :fill="fill"
             :data-role="role"
             :data-value="value"
-            :data-tag="tag"
+            :data-group="group"
         >
-            <use :data-role="role" :data-value="value" :href="iconHref" :data-tag="tag" />
+            <use :data-role="role" :data-value="value" :href="iconHref" :data-group="group" />
         </svg>
     </HorizontalBox>
 </template>
